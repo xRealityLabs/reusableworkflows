@@ -209,7 +209,11 @@ jobs:
           }
           echo "Log Directory: $logDirectory"
           $date = Get-Date -Format "yyyyMMddTHHmmss"
-          $logName = "$logDirectory/${GITHUB_REF_NAME}-$date"
+          $logName = "$logDirectory/${{GITHUB_REF_NAME}}-$date"
+          
+          if([string]::IsNullOrEmpty($logName)) {
+            $logName = "$logDirectory/$date"
+          }          
           $logPath = "$logName.log"
           $testsLogPath = "$logName-tests.xml"
 
