@@ -224,7 +224,7 @@ jobs:
           # Start Testing
           unity-editor -runEditorTests -projectPath $TempUnityProjectName -logfile $logPath -editorTestsResultFile $testsLogPath -buildTarget ${{ matrix.build-target }}
           if($LASTEXITCODE -ne '0'){
-          echo "::group::Unity Unit tests Results"
+          echo "::group::Unity Unit tests errors"
             $exitCode = $testResult.ExitCode
             Get-Content $logPath
             echo "Build failed due to errors ($LASTEXITCODE), please check the log at $logPath"
