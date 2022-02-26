@@ -222,8 +222,11 @@ jobs:
           $testsLogPath = "$logName-tests.xml"
 
           # Start Testing
-          unity-editor -runEditorTests -projectPath $TempUnityProjectName -logfile $logPath -editorTestsResultFile $testsLogPath -buildTarget ${{ matrix.build-target }}
-
+          $testResult = unity-editor -runEditorTests -projectPath $TempUnityProjectName -logfile $logPath -editorTestsResultFile $testsLogPath -buildTarget ${{ matrix.build-target }}
+          if($testResult.ExitCode -ne '0'){
+            echo "Build failed due to errors"
+            exit $testResult.ExitCode
+          }
           echo "::endgroup::"
 
           echo "::group::Unity Unit tests Results"
