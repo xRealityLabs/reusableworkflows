@@ -224,7 +224,8 @@ jobs:
           # Start Testing
           $testResult = unity-editor -runEditorTests -projectPath $TempUnityProjectName -logfile $logPath -editorTestsResultFile $testsLogPath -buildTarget ${{ matrix.build-target }}
           if($testResult.ExitCode -ne '0'){
-            echo "Build failed due to errors"
+            $exitCode = $testResult.ExitCode
+            echo "Build failed due to errors ($exitCode), please check the log at $logPath"
             exit $testResult.ExitCode
           }
           echo "::endgroup::"
