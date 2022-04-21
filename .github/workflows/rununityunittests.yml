@@ -163,6 +163,7 @@ jobs:
             foreach($dependency in $JSONdependencies){
               $dependency.PsObject.Properties | ForEach-Object -Process { 
                 $dependencyName = $_.Name
+                $dependencyPath = $dependencyName.Replace("/","_")
                 $dependencyURL = $_.Value
                 $cloneURL = "https://${{ secrets.GIT_USER_NAME }}:${{ secrets.GIT_PAT }}@$dependencyURL"
 
@@ -170,24 +171,24 @@ jobs:
                 echo "git path - $cloneURL"
 
                 # Clone Dependancy repo to destination folder
-                git clone -b $dependencyName --single-branch $cloneURL $dependencyName
+                git clone -b $dependencyName --single-branch $cloneURL $dependencyPath
 
-                if( -not (Test-Path -Path "$dependencyName")){
+                if( -not (Test-Path -Path "$dependencyPath")){
                   echo "Unable to clone $dependencyName from $dependencyURL"
                   exit 1
                 }
 
                 # Move files from clone path into packages folder, if the dependency contains a UPM package then move the entire folder and not just its contents
                 if (Test-Path -Path "$dependencyName/package.json") {
-                  $package_json = Get-Content -Path $dependencyName/package.json | ConvertFrom-Json
+                  $package_json = Get-Content -Path $dependencyPath/package.json | ConvertFrom-Json
                   $packageName = $package_json.name
-                  Rename-Item $dependencyName $packageName
+                  Rename-Item $dependencyPath $packageName
                   echo "Moving whole $packageName UPM package to $destinationPath"
                   Move-Item -Path "$packageName" -Destination $destinationPath
                 }
                 else {
                   echo "Moving the contents of $dependencyName into the $destinationPath folder"
-                  Move-Item -Path "$dependencyName/*" -Destination $destinationPath
+                  Move-Item -Path "$dependencyPath/*" -Destination $destinationPath
                 }
 
                 # Get Dependency manifest entries (if applicable)
