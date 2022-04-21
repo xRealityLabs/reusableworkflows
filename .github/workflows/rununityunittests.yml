@@ -165,6 +165,7 @@ jobs:
                 $dependencyName = $_.Name
                 $dependencyPath = $dependencyName.Replace("/","_")
                 $dependencyURL = $_.Value
+                echo "Cloning dependency - Name [$dependencyName] - Path [$dependencyPath] - URL [$dependencyURL]"
                 $cloneURL = "https://${{ secrets.GIT_USER_NAME }}:${{ secrets.GIT_PAT }}@$dependencyURL"
 
                 echo "cloning $dependencyName from $dependencyURL and moving to $destinationPath"
@@ -179,7 +180,7 @@ jobs:
                 }
 
                 # Move files from clone path into packages folder, if the dependency contains a UPM package then move the entire folder and not just its contents
-                if (Test-Path -Path "$dependencyName/package.json") {
+                if (Test-Path -Path "$dependencyPath/package.json") {
                   $package_json = Get-Content -Path $dependencyPath/package.json | ConvertFrom-Json
                   $packageName = $package_json.name
                   Rename-Item $dependencyPath $packageName
