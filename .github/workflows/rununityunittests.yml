@@ -249,6 +249,8 @@ jobs:
 
           echo "---------------------------------------------"
           echo "Start Testing"
+          echo "Unity Command\n[unity-editor -runEditorTests -projectPath $TempUnityProjectName -logfile $logPath -editorTestsResultFile $testsLogPath -buildTarget ${{ matrix.build-target }}]"
+          
           unity-editor -runEditorTests -projectPath $TempUnityProjectName -logfile $logPath -editorTestsResultFile $testsLogPath -buildTarget ${{ matrix.build-target }}
 
           echo "---------------------------------------------"
