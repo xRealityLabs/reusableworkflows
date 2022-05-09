@@ -229,7 +229,7 @@ jobs:
           echo "::group::Setup logging and run Unit tests"          
 
           # Log detail
-          $logDirectory = "$TempUnityProjectName/Builds/Logs"
+          $logDirectory = "/Logs"
           if ( -not (Test-Path -Path $logDirectory)) {
             $logDirectory = New-Item -ItemType Directory -Force -Path $logDirectory | Select-Object
           }
@@ -250,16 +250,6 @@ jobs:
           echo "---------------------------------------------"
           echo "Start Testing"
           unity-editor -runEditorTests -projectPath $TempUnityProjectName -logfile $logPath -editorTestsResultFile $testsLogPath -buildTarget ${{ matrix.build-target }}
-          if($LASTEXITCODE -ne '0'){
-          echo "::group::Unity Unit tests errors"
-            $exitCode = $testResult.ExitCode
-            Get-Content $logPath
-            echo "Build failed due to errors ($LASTEXITCODE), please check the log at $logPath"
-          echo "::endgroup::"
-
-            exit $LASTEXITCODE
-          }
-          echo "::endgroup::"
 
           echo "---------------------------------------------"
           echo "::group::Unity Unit tests Results"
@@ -271,6 +261,17 @@ jobs:
           else {
             echo "No test results found for ${GITHUB_REPOSITORY} Branch ${GITHUB_REF} at $testsLogPath"
             echo ""
+          }
+          echo "::endgroup::"
+
+          if($LASTEXITCODE -ne '0'){
+          echo "::group::Unity Unit tests errors"
+            $exitCode = $testResult.ExitCode
+            Get-Content $logPath
+            echo "Build failed due to errors ($LASTEXITCODE), please check the log at $logPath"
+          echo "::endgroup::"
+
+            exit $LASTEXITCODE
           }
           echo "::endgroup::"
 
