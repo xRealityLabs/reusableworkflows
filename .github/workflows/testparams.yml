@@ -19,7 +19,7 @@ jobs:
       - id: testInput
         name: 'Test Input Params'
         run: |
-          echo "::group::Script Versioning
+          echo "::group::Script Versioning"
             $scriptVersion = '1.0.0'
 
             echo 'Build Script Version'

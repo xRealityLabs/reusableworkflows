@@ -26,7 +26,7 @@ jobs:
       - id: validate
         name: 'Unity Project Validation'
         run: |
-          echo "::group::Script Versioning
+          echo "::group::Script Versioning"
             $scriptVersion = '1.0.0'
 
             echo 'Build Script Version'

@@ -30,7 +30,7 @@ jobs:
         run: npm version prerelease -m "Auto increment pre-release version to %s [skip ci]" --force
       - name: Create Pull Request
         run: |
-          echo "::group::Script Versioning
+          echo "::group::Script Versioning"
             $scriptVersion = '1.0.0'
 
             echo 'Build Script Version'
