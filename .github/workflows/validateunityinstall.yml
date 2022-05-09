@@ -30,6 +30,9 @@ jobs:
       - id: validate
         name: 'Unity Project Validation'
         run: |
+          $scriptVersion = 1.0.0
+          echo "Build Script Version $scriptVersion"
+
           echo "::group::Validating input"
 
           $unityVersion = '${{ inputs.unityversion }}'

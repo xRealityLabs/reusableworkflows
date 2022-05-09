@@ -30,6 +30,9 @@ jobs:
         run: npm version prerelease -m "Auto increment pre-release version to %s [skip ci]" --force
       - name: Create Pull Request
         run: |
+          $scriptVersion = 1.0.0
+          echo "Build Script Version $scriptVersion"
+
           git config --global user.email "${{ secrets.NPM_USER_EMAIL }}"
           git config --global user.name "${{ secrets.NPM_USER_NAME }}"
           git commit -am "Automated report"

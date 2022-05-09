@@ -28,6 +28,9 @@ jobs:
       - uses: actions/setup-node@v2
       - name: Set Github vars
         run: |
+          $scriptVersion = 1.0.0
+          echo "Build Script Version $scriptVersion"
+
           if([string]::IsNullOrEmpty('${{ secrets.GIT_USER_NAME }}')){
             if([string]::IsNullOrEmpty('${{ secrets.GIT_USER_NAME }}')){
               $gitUser = "action"
