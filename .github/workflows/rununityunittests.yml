@@ -164,7 +164,8 @@ jobs:
             echo $JSONdependencies
 
             # Read current Manifest json
-            $projectManifest = Get-Content -Path $destinationPath + $directorySeparatorChar + 'manifest.json' | ConvertFrom-Json
+            $manifestPath = $destinationPath + $directorySeparatorChar + 'manifest.json'
+            $projectManifest = Get-Content -Path $manifestPath | ConvertFrom-Json
             $strArray = $projectManifest.dependencies.PsObject.Properties | ForEach-Object {"$($_.Name)@$($_.Value),"}
 
             echo "---------------------------------------------"
