@@ -43,8 +43,12 @@ jobs:
       - id: validate
         name: 'Run Unity Unit tests'
         run: |
-          $scriptVersion = 1.0.0
-          echo "Build Script Version $scriptVersion"
+          echo "::group::Script Versioning
+            $scriptVersion = '1.0.0'
+
+            echo 'Build Script Version'
+            echo $scriptVersion
+          echo "::endgroup::"
 
           echo "::group::Warm up for Unity version"
 

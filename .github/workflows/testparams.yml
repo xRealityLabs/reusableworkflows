@@ -19,8 +19,12 @@ jobs:
       - id: testInput
         name: 'Test Input Params'
         run: |
-          $scriptVersion = 1.0.0
-          echo "Build Script Version $scriptVersion"
+          echo "::group::Script Versioning
+            $scriptVersion = '1.0.0'
+
+            echo 'Build Script Version'
+            echo $scriptVersion
+          echo "::endgroup::"
 
           echo "::group::Testing input params"
           $inputText = "${{ inputs.teststring }}"
