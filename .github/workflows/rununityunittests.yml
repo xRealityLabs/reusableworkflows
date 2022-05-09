@@ -229,7 +229,7 @@ jobs:
           echo "::group::Setup logging and run Unit tests"          
 
           # Log detail
-          $logDirectory = "/Logs"
+          $logDirectory = "Logs"
           if ( -not (Test-Path -Path $logDirectory)) {
             $logDirectory = New-Item -ItemType Directory -Force -Path $logDirectory | Select-Object
           }
@@ -247,10 +247,13 @@ jobs:
           $logPath = "$logName.log"
           $testsLogPath = "$logName-tests.xml"
 
+          echo "Logpath [$logPath]"
+          echo "TestsPath [$testsLogPath]"
+
           echo "---------------------------------------------"
           echo "Start Testing"
           echo "Unity Command\n[unity-editor -runEditorTests -projectPath $TempUnityProjectName -logfile $logPath -editorTestsResultFile $testsLogPath -buildTarget ${{ matrix.build-target }}]"
-          
+
           unity-editor -runEditorTests -projectPath $TempUnityProjectName -logfile $logPath -editorTestsResultFile $testsLogPath -buildTarget ${{ matrix.build-target }}
 
           echo "---------------------------------------------"
