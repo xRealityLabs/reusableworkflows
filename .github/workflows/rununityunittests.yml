@@ -329,6 +329,4 @@ jobs:
         if: always()
         with:
           name: unity-build-log
-          path: |
-            $logPath
-            $testsLogPath
+          path: Logs/**
