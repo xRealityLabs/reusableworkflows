@@ -310,16 +310,17 @@ jobs:
             exit $LASTEXITCODE
           }
 
-          $buildMethod = 'RealityToolkit.BuildTools.Editor.BuildCommand.Build';
           if ( -not (Test-Path "$editorrunpath") ) 
           {
             New-Item './builds' -ItemType Directory
           }
-          $buildPath = '.' + $directorySeparatorChar + 'builds' + $directorySeparatorChar + ${{ matrix.build-target }};
+          $buildTarget = "${{ matrix.build-target }}"
+          $buildPath = '.' + $directorySeparatorChar + 'builds' + $directorySeparatorChar + $buildTarget;
+          $buildMethod = 'RealityToolkit.BuildTools.Editor.BuildCommand.Build';
 
-          echo "Unity Command\n[unity-editor -projectPath $TempUnityProjectName -logfile $logPath -batchmode -nographics -quit -buildTarget ${{ matrix.build-target }} -executeMethod ${buildMethod} -buildPath $buildPath]"
+          echo "Unity Command\n[unity-editor -projectPath $TempUnityProjectName -logfile $logPath -batchmode -nographics -quit -buildTarget $buildTarget -executeMethod $buildMethod -buildPath $buildPath]"
 
-          unity-editor -projectPath $TempUnityProjectName -logfile $logPath -batchmode -nographics -quit -buildTarget ${{ matrix.build-target }} -executeMethod ${buildMethod} -buildPath $buildPath
+          unity-editor -projectPath $TempUnityProjectName -logfile $logPath -batchmode -nographics -quit -buildTarget $buildTarget -executeMethod $buildMethod -buildPath $buildPath
 
           echo "---------------------------------------------"          
           echo "::endgroup::"
