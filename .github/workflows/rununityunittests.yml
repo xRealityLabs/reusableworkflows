@@ -318,9 +318,9 @@ jobs:
           $buildPath = '.' + $directorySeparatorChar + 'builds' + $directorySeparatorChar + $buildTarget;
           $buildMethod = 'RealityToolkit.BuildTools.Editor.BuildCommand.Build';
 
-          echo "Unity Command\n[unity-editor -projectPath $TempUnityProjectName -logfile $logPath -batchmode -nographics -quit -buildTarget $buildTarget -executeMethod $buildMethod -buildPath $buildPath]"
+          echo "Unity Command\n[unity-editor -projectPath $TempUnityProjectName -logfile $logPath -nographics -quit -buildTarget $buildTarget -executeMethod $buildMethod -buildPath $buildPath]"
 
-          unity-editor -projectPath $TempUnityProjectName -logfile $logPath -batchmode -nographics -quit -buildTarget $buildTarget -executeMethod $buildMethod -buildPath $buildPath
+          unity-editor -projectPath $TempUnityProjectName -logfile $logPath -nographics -quit -buildTarget $buildTarget -executeMethod $buildMethod -buildPath $buildPath
 
           echo "---------------------------------------------"          
           echo "::endgroup::"
