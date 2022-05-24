@@ -80,12 +80,14 @@ jobs:
       GIT_PAT: ${{ secrets.GIT_PAT }}
 
   Run-Unity-Build:
+  # FOr example only, Build script needs work
     name: Run Unity Builds
     needs: Run-Unit-Tests
     uses: realitycollective/reusableworkflows/.github/workflows/rununitybuild.yml@main
     with:
       build-target: windows
-      projectpath: ${{ needs.Run-Unit-Tests.outputs.unityprojectpath }}          
+      unityversion: ${{ needs.Setup-Unity.outputs.unityeditorversion }}
+      projectpath: ${{ needs.Run-Unit-Tests.outputs.unityprojectpath }}        
       
   # Publish preview package if successful, bumps version of package
   run-upm:
