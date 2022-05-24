@@ -331,3 +331,8 @@ jobs:
         path: |
           $logPath
           $testsLogPath
+      - id: returnExitCode
+        name: 'Output Last Error code'
+        run: |
+          #exit $LASTEXITCODE
+      
