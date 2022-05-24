@@ -296,7 +296,7 @@ jobs:
             echo "Build failed due to errors ($LASTEXITCODE), please check the log at $logPath"
           echo "::endgroup::"
 
-            #exit $LASTEXITCODE
+            exit $LASTEXITCODE
           }
           echo "::endgroup::"
 
@@ -319,20 +319,16 @@ jobs:
           }
           else {
             echo "Build tools not found, have you included com.realitytoolkit.buildtools in the build depenendencies?"
-            #exit $LASTEXITCODE
+            exit $LASTEXITCODE
           }
           echo "---------------------------------------------"          
           echo "::endgroup::"
 
         shell: pwsh
       - uses: actions/upload-artifact@v3
+        if: always()
         with:
           name: unity-build-log
           path: |
             $logPath
             $testsLogPath
-      - id: returnExitCode
-        name: 'Output Last Error code'
-        run: |
-          #exit $LASTEXITCODE
-      
