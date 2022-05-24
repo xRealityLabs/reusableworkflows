@@ -300,4 +300,17 @@ jobs:
           }
           echo "::endgroup::"
 
+          echo "::group::Run build"              
+
+          echo "---------------------------------------------"
+          echo "Start Testing"
+          echo "Unity Command\n[unity-editor -projectPath $TempUnityProjectName -logfile $logPath -batchmode -nographics -quit -buildTarget ${{ matrix.build-target }}]"
+
+          unity-editor -projectPath $TempUnityProjectName -logfile $logPath -batchmode -nographics -quit -buildTarget ${{ matrix.build-target }}
+
+          echo "---------------------------------------------"          
+          echo "::endgroup::"
+
         shell: pwsh
+
+        
