@@ -247,9 +247,13 @@ jobs:
 
           # Log detail
           $logDirectory = "Logs"
-          if ( -not (Test-Path -Path $logDirectory)) {
-            $logDirectory = New-Item -ItemType Directory -Force -Path $logDirectory | Select-Object
+          if (Test-Path -Path $logDirectory) {
+            echo "Clearing logs from a previous run"
+            Remove-item $logDirectory -recurse
           }
+
+          $logDirectory = New-Item -ItemType Directory -Force -Path $logDirectory | Select-Object
+
           echo "Log Directory: $logDirectory"
           $date = Get-Date -Format "yyyyMMddTHHmmss"
 
