@@ -78,11 +78,19 @@ jobs:
     secrets:
       GIT_USER_NAME: ${{ secrets.GIT_USER_NAME }}    
       GIT_PAT: ${{ secrets.GIT_PAT }}
+
+  Run-Unity-Build:
+    name: Run Unity Builds
+    needs: Run-Unit-Tests
+    uses: realitycollective/reusableworkflows/.github/workflows/rununitybuild.yml@main
+    with:
+      build-target: windows
+      projectpath: ${{ needs.Run-Unit-Tests.outputs.unityprojectpath }}          
       
   # Publish preview package if successful, bumps version of package
   run-upm:
     name: Publish UPM Package
-    needs: Run-Unit-Tests
+    needs: [Run-Unit-Tests,Run-Unity-Build]
     uses: realitycollective/reusableworkflows/.github/workflows/upmrelease.yml@main
     with:
       build-target: windows
