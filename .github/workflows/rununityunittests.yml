@@ -296,7 +296,7 @@ jobs:
             echo "Build failed due to errors ($LASTEXITCODE), please check the log at $logPath"
           echo "::endgroup::"
 
-            exit $LASTEXITCODE
+            #exit $LASTEXITCODE
           }
           echo "::endgroup::"
 
@@ -304,27 +304,30 @@ jobs:
 
           echo "---------------------------------------------"
           echo "Start Building"
-          if ( -not (Test-Path "$destinationPath/com.realitytoolkit.buildtools") ) 
+          if (Test-Path "$destinationPath/com.realitytoolkit.buildtools") 
           {
+            if ( -not (Test-Path "$editorrunpath") ) {
+              New-Item './builds' -ItemType Directory
+            }
+            $buildTarget = "${{ matrix.build-target }}"
+            $buildPath = '.' + $directorySeparatorChar + 'builds' + $directorySeparatorChar + $buildTarget;
+            $buildMethod = 'RealityToolkit.BuildTools.Editor.BuildCommand.Build';
+
+            echo "Unity Command\n[unity-editor -projectPath $TempUnityProjectName -logfile $logPath -nographics -quit -buildTarget $buildTarget -executeMethod $buildMethod -buildPath $buildPath]"
+
+            unity-editor -projectPath $TempUnityProjectName -logfile $logPath -nographics -quit -buildTarget $buildTarget -executeMethod $buildMethod -buildPath $buildPath
+          }
+          else {
             echo "Build tools not found, have you included com.realitytoolkit.buildtools in the build depenendencies?"
-            exit $LASTEXITCODE
+            #exit $LASTEXITCODE
           }
-
-          if ( -not (Test-Path "$editorrunpath") ) 
-          {
-            New-Item './builds' -ItemType Directory
-          }
-          $buildTarget = "${{ matrix.build-target }}"
-          $buildPath = '.' + $directorySeparatorChar + 'builds' + $directorySeparatorChar + $buildTarget;
-          $buildMethod = 'RealityToolkit.BuildTools.Editor.BuildCommand.Build';
-
-          echo "Unity Command\n[unity-editor -projectPath $TempUnityProjectName -logfile $logPath -nographics -quit -buildTarget $buildTarget -executeMethod $buildMethod -buildPath $buildPath]"
-
-          unity-editor -projectPath $TempUnityProjectName -logfile $logPath -nographics -quit -buildTarget $buildTarget -executeMethod $buildMethod -buildPath $buildPath
-
           echo "---------------------------------------------"          
           echo "::endgroup::"
 
         shell: pwsh
-
-        
+      - uses: actions/upload-artifact@v3
+        with:
+          name: unity-build-log
+        path: |
+          $logPath
+          $testsLogPath
