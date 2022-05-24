@@ -19,11 +19,17 @@ on:
         required: false            
       GIT_PAT: 
         required: false
+    outputs:
+      unityversion:
+        description: "Returns the version of Unity the UPM package requires"
+        value: ${{ jobs.run_tests.outputs.unityprojectpath }}
 
 jobs:
   run_tests:
     name: Run Unity Unit Tests
     runs-on: ${{ matrix.os }}
+    outputs:
+      unityprojectpath: ${{ steps.validate.outputs.unityprojectpath }}    
     strategy:
       matrix:
         include:
@@ -33,7 +39,7 @@ jobs:
             build-target: StandaloneWindows64
           - os: windows
             build-target: WSAPlayer
-
+        
     steps:
       - uses: actions/checkout@v2
         with:
@@ -278,6 +284,9 @@ jobs:
             echo "No test results found for ${GITHUB_REPOSITORY} Branch ${GITHUB_REF} at $testsLogPath"
             echo ""
           }
+
+          echo "Unity Project path $TempUnityProjectName"
+          echo "::set-output name=unityprojectpath::$TempUnityProjectName"          
           echo "::endgroup::"
 
           if($LASTEXITCODE -ne '0'){
