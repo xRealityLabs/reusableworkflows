@@ -328,9 +328,9 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: unity-build-log
-        path: |
-          $logPath
-          $testsLogPath
+          path: |
+            $logPath
+            $testsLogPath
       - id: returnExitCode
         name: 'Output Last Error code'
         run: |
