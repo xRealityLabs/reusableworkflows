@@ -307,10 +307,10 @@ jobs:
           if (Test-Path "$destinationPath/com.realitytoolkit.buildtools") 
           {
             if ( -not (Test-Path "$editorrunpath") ) {
-              New-Item './builds' -ItemType Directory
+              New-Item 'builds' -ItemType Directory
             }
             $buildTarget = "${{ matrix.build-target }}"
-            $buildPath = '.' + $directorySeparatorChar + 'builds' + $directorySeparatorChar + $buildTarget;
+            $buildPath = 'builds' + $directorySeparatorChar + $buildTarget;
             $buildMethod = 'RealityToolkit.BuildTools.Editor.BuildCommand.Build';
 
             echo "Unity Command\n[unity-editor -projectPath $TempUnityProjectName -logfile $logPath -nographics -quit -buildTarget $buildTarget -executeMethod $buildMethod -buildPath $buildPath]"
