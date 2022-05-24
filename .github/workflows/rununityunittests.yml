@@ -303,10 +303,23 @@ jobs:
           echo "::group::Run build"              
 
           echo "---------------------------------------------"
-          echo "Start Testing"
-          echo "Unity Command\n[unity-editor -projectPath $TempUnityProjectName -logfile $logPath -batchmode -nographics -quit -buildTarget ${{ matrix.build-target }}]"
+          echo "Start Building"
+          if ( -not (Test-Path "$destinationPath/com.realitytoolkit.buildtools") ) 
+          {
+            echo "Build tools not found, have you included com.realitytoolkit.buildtools in the build depenendencies?"
+            exit $LASTEXITCODE
+          }
 
-          unity-editor -projectPath $TempUnityProjectName -logfile $logPath -batchmode -nographics -quit -buildTarget ${{ matrix.build-target }}
+          $buildMethod = 'RealityToolkit.BuildTools.Editor.BuildCommand.Build';
+          if ( -not (Test-Path "$editorrunpath") ) 
+          {
+            New-Item './builds' -ItemType Directory
+          }
+          $buildPath = '.' + $directorySeparatorChar + 'builds' + $directorySeparatorChar + ${{ matrix.build-target }};
+
+          echo "Unity Command\n[unity-editor -projectPath $TempUnityProjectName -logfile $logPath -batchmode -nographics -quit -buildTarget ${{ matrix.build-target }} -executeMethod ${buildMethod} -buildPath $buildPath]"
+
+          unity-editor -projectPath $TempUnityProjectName -logfile $logPath -batchmode -nographics -quit -buildTarget ${{ matrix.build-target }} -executeMethod ${buildMethod} -buildPath $buildPath
 
           echo "---------------------------------------------"          
           echo "::endgroup::"
