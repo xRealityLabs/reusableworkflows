@@ -1,4 +1,4 @@
-name: Run Unity unit tests
+name: Run Unity Builds
 
 on:
   workflow_call:
@@ -16,8 +16,8 @@ on:
         type: string
 
 jobs:
-  run_tests:
-    name: Run Unity Unit Tests
+  run_build:
+    name: Run Unity Build process
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
