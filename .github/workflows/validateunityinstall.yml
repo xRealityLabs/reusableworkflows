@@ -27,16 +27,16 @@ jobs:
       unityversion: ${{ steps.validate.outputs.unityversion }}
       editorinstalled: ${{ steps.validate.outputs.editorinstalled }}
     steps:
+      - name: Script Version
+        run: |
+          echo "::group::Script Versioning"
+          $scriptVersion = "1.0.2"
+          echo "Build Script Version: $scriptVersion"
+          echo "::endgroup::"
+        shell: pwsh      
       - id: validate
         name: 'Unity Project Validation'
         run: |
-          echo "::group::Script Versioning"
-            $scriptVersion = '1.0.0'
-
-            echo 'Build Script Version'
-            echo $scriptVersion
-          echo "::endgroup::"
-
           echo "::group::Validating input"
 
           $unityVersion = '${{ inputs.unityversion }}'
@@ -139,21 +139,34 @@ jobs:
             exit 1
           }
 
-          function GetString($InputString, $InputPattern, $MatchIndex) {
+          function GetString($InputString, $InputPattern, $MatchIndex) 
+          {
             $regExResult = $InputString | Select-String -Pattern $InputPattern
-            $regExResult.Matches[$MatchIndex].Value
-          }          
+            if($regExResult.Length -gt 0)
+            {
+              return $regExResult.Matches[$MatchIndex].Value
+            }
+            else 
+            {
+              return 0
+            }
+          }
 
           if($unityVersion.Length -lt 10)
           {
             echo 'Short version of Version provided, finding latest full unity version number'
-            $InstalledUnityVersions = unity-hub editors -r
-            $unityVersion = GetString $InstalledUnityVersions "$unityVersion.{4,7}" -MatchIndex 0
-            $unityVersion = $unityVersion.Trim(","," ").Trim()
-            echo "Long Unity version is $unityVersion"
+            $queryUnityVersion = GetString $InstalledUnityVersions "$unityVersion.{4,7}" -MatchIndex 0
+            if ($queryUnityVersion -ne 0) 
+            {
+                $unityVersion = $queryUnityVersion.Trim(","," ").Trim()
+                echo "Long Unity version is $unityVersion"
+            }
+            else 
+            {
+                echo "Unity $unityVersion not found on this machine, please install"
+                exit 1
+            }
           }
-
-          echo "::set-output name=unityversion::$unityVersion"            
 
           $editorPath = "{0}{1}{2}" -f $editorRootPath,$unityVersion,$editorFileEx
 
@@ -179,8 +192,8 @@ jobs:
           echo "UnityEditor path set to: $editorPath"
           echo ""
           echo "Editor install result was $installedResult"
-          echo "::set-output name=unityversion::$unityVersion"
-          echo "::set-output name=editorinstalled::$installedResult"
+          echo "unityversion=$unityVersion" >> $env:GITHUB_OUTPUT
+          echo "editorinstalled=$installedResult" >> $env:GITHUB_OUTPUT
           echo "::endgroup::"
 
           exit 0
