@@ -30,7 +30,7 @@ jobs:
       - name: Script Version
         run: |
           echo "::group::Script Versioning"
-          $scriptVersion = "1.0.2"
+          $scriptVersion = "1.0.3"
           echo "Build Script Version: $scriptVersion"
           echo "::endgroup::"
         shell: pwsh      
@@ -152,11 +152,12 @@ jobs:
             }
           }
 
-         function Get-LetterCount
+          function Get-LetterCount
           {
             Param ([string]$string)
             return $string.Length
           }          
+
           echo "::group::Find Installed Unity version based on input"
           echo "Unity hub path is {$hubPath}"
           echo "Requested unity version is {$unityVersion}"
@@ -165,6 +166,7 @@ jobs:
           $editorRootPath = unity-hub ip -g
           echo "Installed unity versions are {$InstalledUnityVersions}"
           echo "Unity install path is {$editorRootPath}"
+
           $versionLength = Get-LetterCount $unityVersion
           if ($versionLength -eq 4) {
             $queryUnityVersion = GetString $InstalledUnityVersions "$unityVersion.{4,7}" -MatchIndex 0
@@ -175,7 +177,9 @@ jobs:
           else {
             $queryUnityVersion = GetString $InstalledUnityVersions "$unityVersion" -MatchIndex 0
           }
+
           echo "Found unity version is {$queryUnityVersion} for input {$unityVersion}"
+
           if ($queryUnityVersion -ne 0) 
           {
             $unityVersion = $queryUnityVersion.Trim(","," ").Trim()
@@ -186,8 +190,11 @@ jobs:
             echo "Unity $unityVersion not found on this machine, skipping"
             exit 0
           }
+
           echo "::endgroup::"
+
           $editorPath = "{0}{1}{2}" -f $editorRootPath,$unityVersion,$editorFileEx
+
           echo "Unity Hub found at `"$hubPath`""
           echo ""
           echo "Editor root path currently set to: `"$editorRootPath`""
@@ -196,12 +203,16 @@ jobs:
           echo ""
           unity-hub help
           echo ""
+
           echo "::endgroup::"
+
           echo "::group::Checking Unity Editor Installation"              
+
           if ( Test-Path -Path $editorPath ) 
           {
             $installedResult = 1
           }
+
           echo ""
           echo "UnityEditor path set to: $editorPath"
           echo ""
@@ -209,5 +220,6 @@ jobs:
           echo "unityversion=$unityVersion" >> $env:GITHUB_OUTPUT
           echo "editorinstalled=$installedResult" >> $env:GITHUB_OUTPUT
           echo "::endgroup::"
+
           exit 0
         shell: pwsh
